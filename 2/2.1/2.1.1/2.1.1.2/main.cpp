@@ -44,7 +44,7 @@ namespace stq {
         }
     }
 
-    void listen(int backlog = 10) const {
+    void listen(const int backlog = 10) const {
       if (::listen(fd, backlog) == -1)
         {
           throw std::runtime_error(std::string("listen() failed: ") + strerror(errno));
@@ -138,7 +138,7 @@ namespace stq {
     }
 }*/
 
-void select_io(const stq::socket &socket) {
+[[noreturn]] void select_io(const stq::socket &socket) {
   
   fd_set rfds,rset;
   FD_ZERO(&rfds);
@@ -148,7 +148,7 @@ void select_io(const stq::socket &socket) {
   while (true)
     {
       rset = rfds;
-      int nready = select(maxfd+1,&rset,nullptr,nullptr,nullptr);
+      select(maxfd+1,&rset,nullptr,nullptr,nullptr);
       if (FD_ISSET(socket.fd,&rset))
         {
           sockaddr_in clientaddr{};

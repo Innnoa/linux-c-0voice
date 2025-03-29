@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/tmp/tmp.Do4EtixqL8/2.1.1.2/main.cpp" "CMakeFiles/2_1_1_2.dir/main.cpp.o" "gcc" "CMakeFiles/2_1_1_2.dir/main.cpp.o.d"
+  "/home/innno/code/0voice/2/2.1/2.1.1/2.1.1.2/main.cpp" "CMakeFiles/2_1_1_2.dir/main.cpp.o" "gcc" "CMakeFiles/2_1_1_2.dir/main.cpp.o.d"
   )
 
 # Targets to which this target links.
