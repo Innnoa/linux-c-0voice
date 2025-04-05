@@ -67,76 +67,8 @@ namespace stq {
   };
 }
 
-/*static void *client_thread(void *arg) {
-  const int client_fd = *static_cast<int *>(arg);
-  delete static_cast<int *>(arg); // 释放动态内存  
 
-  try
-    {
-      while (true)
-        {
-          char buffer[120];
-          const ssize_t count = recv(client_fd, buffer, sizeof(buffer), 0);
-          if (count <= 0)
-            {
-              if (count == 0)
-                {
-                  std::cout << "Client " << client_fd << " disconnected\n";
-                } else
-                {
-                  perror("recv error");
-                }
-              break;
-            }
-
-          // 处理退出指令  
-          if (std::string(buffer, count) == "out")
-            {
-              std::cout << "Client " << client_fd << " requested to disconnect\n";
-              break;
-            }
-
-          // 回显数据  
-          if (send(client_fd, buffer, count, 0) == -1)
-            {
-              throw std::runtime_error("send failed");
-            }
-
-          std::cout << "Client " << client_fd
-              << " | Received: " << count << " bytes" << "str:" << std::string(buffer, count) << "\n";
-        }
-    } catch (const std::exception &e)
-    {
-      std::cerr << "Client " << client_fd << " error: " << e.what() << "\n";
-    }
-
-  close(client_fd);
-  return nullptr;
-}*/
-
-/*void thread_run(const stq::socket &socket) {
-  try
-    {
-      sockaddr_in clientaddr{};
-      const int client_fd = socket.accept(clientaddr); // 阻塞但立即返回新fd  
-
-      // 动态分配fd副本  
-      const auto client_fd_ptr = new int(client_fd);
-
-      pthread_t thid;
-      if (pthread_create(&thid, nullptr, client_thread, client_fd_ptr) != 0)
-        {
-          std::cerr << "Failed to create thread\n";
-          delete client_fd_ptr;
-          close(client_fd);
-          return;
-        }
-      pthread_detach(thid); // 分离线程  
-    } catch (const std::exception &e)
-    {
-      std::cerr << "Accept error: " << e.what() << "\n";
-    }
-}*/
+//c++ poll:
 
 [[noreturn]] void select_io(const stq::socket &socket) {
   
@@ -187,10 +119,9 @@ int main() {
       server_addr.sin_family = AF_INET;
       server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
       server_addr.sin_port = htons(stq::socket::PORT);
-
       socket.bind(server_addr);
       socket.listen();
-
+      
       while (true)
         {
           select_io(socket); // 持续接受新连接  
@@ -202,6 +133,7 @@ int main() {
     }
 }
 
+//c poll:
 
 // void *client_thread(void *arg) {
 //   const int clientfd = *static_cast<int *>(arg);
