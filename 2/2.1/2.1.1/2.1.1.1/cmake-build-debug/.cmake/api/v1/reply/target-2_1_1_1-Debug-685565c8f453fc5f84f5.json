@@ -2,7 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "2_1_1_1"
+			"path" : "2_1_1_1.exe"
+		},
+		{
+			"path" : "2_1_1_1.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -35,10 +38,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -fdiagnostics-color=always"
-				},
-				{
-					"fragment" : "-std=gnu++2a"
+					"fragment" : " -pthread -g -std=gnu++20 -fdiagnostics-color=always"
 				}
 			],
 			"language" : "CXX",
@@ -62,18 +62,22 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-pthread -g",
 				"role" : "flags"
 			},
 			{
 				"fragment" : "",
 				"role" : "flags"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
 	"name" : "2_1_1_1",
-	"nameOnDisk" : "2_1_1_1",
+	"nameOnDisk" : "2_1_1_1.exe",
 	"paths" : 
 	{
 		"build" : ".",
