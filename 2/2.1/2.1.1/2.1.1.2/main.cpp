@@ -68,7 +68,7 @@ namespace stq {
 }
 
 
-//c++ poll:
+//c++ select:
 
 [[noreturn]] void select_io(const stq::socket &socket) {
   
@@ -88,7 +88,7 @@ namespace stq {
           int clientfd = accept(socket.fd,reinterpret_cast<sockaddr *>(&clientaddr),&len);
           std::cout<<"sockfd: "<< clientfd <<"\n";
           FD_SET(clientfd,&rfds);
-          maxfd = clientfd;
+          maxfd = clientfd; 
         }
       for (int i {socket.fd+1}; i<= maxfd; ++i)
         {
@@ -133,7 +133,7 @@ int main() {
     }
 }
 
-//c poll:
+//c select:
 
 // void *client_thread(void *arg) {
 //   const int clientfd = *static_cast<int *>(arg);
