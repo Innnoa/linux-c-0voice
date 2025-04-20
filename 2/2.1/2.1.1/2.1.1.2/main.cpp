@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <netinet/in.h>
 #include <iostream>
+#include <cstring>
 #include <string>
 #include <cerrno>
 #include <cstring>
@@ -551,22 +552,22 @@
 //
 //               std::cout << "sockfd: " << clientfd << "\n";
 //             } else if (events[i].events & EPOLLIN)
-//             {
-//               char buffer[50] = {};
-//               ssize_t count = recv(connfd, buffer, 50, 0);
-//               send(i, buffer, count, 0);
-//               if (std::string(buffer, count) == "out" || count == 0)
-//                 {
-//                   std::cout << "out\n";
+//               {
+//                 char buffer[50] = {};
+//                 ssize_t count = recv(connfd, buffer, 50, 0);
+//                 send(i, buffer, count, 0);
+//                 if (std::string(buffer, count) == "out" || count == 0)
+//                   {
+//                     std::cout << "out\n";
 //
-//                   epoll_ctl(epfd,EPOLL_CTL_DEL, connfd, nullptr);
+//                     epoll_ctl(epfd,EPOLL_CTL_DEL, connfd, nullptr);
 //
-//                   close(i);
-//                   continue;
-//                 }
-//               send(connfd, buffer, count, 0);
-//               std::cout << " " << "clientfd: " << connfd << " " << "count: " << count << "buffer: " << buffer << "\n";
-//             }
+//                     close(i);
+//                     continue;
+//                   }
+//                 send(connfd, buffer, count, 0);
+//                 std::cout << " " << "clientfd: " << connfd << " " << "count: " << count << "buffer: " << buffer << "\n";
+//               }
 //         }
 //     }
 // }
