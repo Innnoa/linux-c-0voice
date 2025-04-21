@@ -6,10 +6,221 @@
  * @Create: 2024/2/27 - 21:54
  * @Version: v1.0
  */
-#include <bits/stdc++.h>
+#include <sys/socket.h>
+#include <sys/epoll.h>
+#include <sys/poll.h>
+#include <stdexcept>
+#include <netinet/in.h>
+#include <iostream>
+#include <string>
+#include <cerrno>
+#include <cstring>
+#include <unistd.h>
 using namespace std;
 
+// c:
+
+// constexpr int conn_buff = 128;
+// constexpr int conn_num = 1024;
+//
+// struct conn_item {
+//   int fd;
+//   char buffer[conn_buff];
+//   ssize_t idx;
+// } connlist[conn_num];
+//
+// int main() {
+//   const int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+//   sockaddr_in serveraddr{};
+//   serveraddr.sin_family = AF_INET;
+//   serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
+//   serveraddr.sin_port = htons(2048);
+//   if (-1 == bind(sockfd, reinterpret_cast<const sockaddr *>(&serveraddr), sizeof(sockaddr)))
+//     {
+//       perror("bind");
+//       return -1;
+//     }
+//   listen(sockfd, 10);
+//
+//   int epfd = epoll_create(1);
+//
+//   epoll_event ev{};
+//   ev.events = EPOLLIN;
+//   ev.data.fd = sockfd;
+//
+//   epoll_ctl(epfd, EPOLL_CTL_ADD, sockfd, &ev);
+//
+//   epoll_event events[1024] = {};
+//
+//   std::cout << "loop\n";
+//   while (true)
+//     {
+//       int nready = epoll_wait(epfd, events, 1024, -1);
+//       for (int i = 0; i < nready; ++i)
+//         {
+//           int connfd = events[i].data.fd;
+//           if (sockfd == connfd)
+//             {
+//               sockaddr_in clientaddr{};
+//               socklen_t len = sizeof(clientaddr);
+//               int clientfd = accept(sockfd, reinterpret_cast<sockaddr *>(&clientaddr), &len);
+//               ev.events = EPOLLIN | EPOLLET; //ET
+//               //ev.events = EPOLLIN; //LT              ev.data.fd = clientfd;
+//               epoll_ctl(epfd, EPOLL_CTL_ADD, clientfd, &ev);
+//
+//               connlist[clientfd].fd = clientfd;
+//               memset(connlist[clientfd].buffer, 0, conn_buff);
+//               connlist[clientfd].idx = 0;
+//
+//               std::cout << "sockfd: " << clientfd << "\n";
+//             } else if (events[i].events & EPOLLIN)
+//             {
+//               char *buffer = connlist[connfd].buffer;
+//               ssize_t idx = connlist[connfd].idx;
+//               const ssize_t count = recv(connfd, buffer + idx, conn_buff - idx, 0);
+//               //send(i, buffer, count, 0);
+//               if (count == 0)
+//                 {
+//                   std::cout << "out\n";
+//                   epoll_ctl(epfd, EPOLL_CTL_DEL, connfd, nullptr);
+//                   close(i);
+//                   continue;
+//                 }
+//               connlist[connfd].idx += count;
+//               send(connfd, buffer + idx, count, 0);
+//               std::cout << " " << "clientfd: " << connfd << " " << "count: " << count << "buffer: " << buffer + idx <<
+//                   "\n";
+//             }
+//         }
+//     }
+// }
+
+// c++:
+
+constexpr int conn_buff = 128;
+constexpr int conn_num = 1024;
+
+struct conn_item {
+  int fd;
+  char buffer[conn_buff];
+  ssize_t idx;
+} connlist[conn_num];
+
+namespace stq {
+  class socket {
+  public:
+    explicit socket(const int domain, const int type, const int protocol = 0) {
+      fd = ::socket(domain, type, protocol);
+      if (fd == -1)
+        {
+          throw std::runtime_error(std::string("socket() failed: ") + strerror(errno));
+        }
+    }
+    // 移动构造函数
+socket(socket &&other) noexcept : fd(other.fd) {
+      other.fd = -1;
+    }
+    // 禁止拷贝
+socket(const socket &) = delete;
+    socket &operator=(const socket &) = delete;
+    ~socket() {
+      if (fd != -1)
+        {
+          close(fd); //断开连接
+}
+    }
+    void bind(const sockaddr_in &address) const {
+      if (::bind(fd, reinterpret_cast<const sockaddr *>(&address), sizeof(address)) == -1)
+        {
+          throw std::runtime_error(std::string("bind() failed: ") + strerror(errno));
+        }
+    }
+    void listen(const int backlog = 10) const {
+      if (::listen(fd, backlog) == -1)
+        {
+          throw std::runtime_error(std::string("listen() failed: ") + strerror(errno));
+        }
+      std::cout << "Server listening on port " << PORT << "\n";
+    }
+    int accept(sockaddr_in &address) const {
+      socklen_t len = sizeof(address);
+      const int client_fd = ::accept(fd, reinterpret_cast<sockaddr *>(&address), &len);
+      if (client_fd == -1)
+        {
+          throw std::runtime_error(std::string("accept() failed: ") + strerror(errno));
+        }
+      return client_fd;
+    }
+    static constexpr uint16_t PORT = 2048;
+    int fd = -1;
+  };
+}
+[[noreturn]] void epoll_io(const stq::socket &socket) {
+  int epfd = epoll_create(1);
+  epoll_event ev{};
+  ev.events = EPOLLIN;
+  ev.data.fd = socket.fd;
+  epoll_ctl(epfd,EPOLL_CTL_ADD, socket.fd, &ev);
+  epoll_event events[1024] = {};
+  std::cout << "loop\n";
+  while (true)
+    {
+      int nready = epoll_wait(epfd, events, 1024, -1);
+      for (int i = 0; i < nready; ++i)
+        {
+          int connfd = events[i].data.fd;
+          if (socket.fd == connfd)
+            {
+              sockaddr_in clientaddr{};
+              socklen_t len = sizeof(clientaddr);
+              int clientfd = accept(socket.fd, reinterpret_cast<sockaddr *>(&clientaddr), &len);
+              //ev.events = EPOLLIN | EPOLLET; //ET
+              ev.events = EPOLLIN; //LT
+              ev.data.fd = clientfd;
+              epoll_ctl(epfd,EPOLL_CTL_ADD, clientfd, &ev);
+              connlist[clientfd].fd = clientfd;
+              memset(connlist[clientfd].buffer, 0, conn_buff);
+              connlist[clientfd].idx = 0;
+              std::cout << "sockfd: " << clientfd << "\n";
+            } else if (events[i].events & EPOLLIN)
+            {
+              char *buffer = connlist[connfd].buffer;
+              ssize_t idx = connlist[connfd].idx;
+              const ssize_t count = recv(connfd, buffer + idx, conn_buff - idx, 0);
+              //send(i, buffer, count, 0);
+              if (count == 0)
+                {
+                  std::cout << "out\n";
+                  epoll_ctl(epfd,EPOLL_CTL_DEL, connfd, nullptr);
+                  close(i);
+                  continue;
+                }
+              connlist[connfd].idx += count;
+              send(connfd, buffer + idx, count, 0);
+              std::cout << " " << "clientfd: " << connfd << " " << "count: " << count << "buffer: " << buffer + idx <<
+                  "\n";
+            }
+        }
+    }
+}
+
 int main() {
-  ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-  return 0;
+  try
+    {
+      const stq::socket socket(AF_INET, SOCK_STREAM, 0);
+      sockaddr_in server_addr{};
+      server_addr.sin_family = AF_INET;
+      server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+      server_addr.sin_port = htons(stq::socket::PORT);
+      socket.bind(server_addr);
+      socket.listen();
+      while (true)
+        {
+          epoll_io(socket); // 持续接受新连接
+}
+    } catch (const std::exception &e)
+    {
+      std::cerr << "Fatal error: " << e.what() << "\n";
+      return EXIT_FAILURE;
+    }
 }

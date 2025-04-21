@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.25"
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "2_1_1_3::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-2_1_1_3-Debug-450ec4dce8fe320ff5b5.json",
+					"jsonFile" : "target-2_1_1_3-Debug-9b70085338d81581728e.json",
 					"name" : "2_1_1_3",
 					"projectIndex" : 0
 				}
@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/tmp/tmp.OuzrIJzEhz/2.1.1.3/cmake-build-debug",
-		"source" : "/tmp/tmp.OuzrIJzEhz/2.1.1.3"
+		"build" : "J:/Linux c++/0voice/linux-c-0voice/2/2.1/2.1.1/2.1.1.3/cmake-build-debug",
+		"source" : "J:/Linux c++/0voice/linux-c-0voice/2/2.1/2.1.1/2.1.1.3"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 7
 	}
 }
