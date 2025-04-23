@@ -303,24 +303,25 @@ void http_requset ( const connection_t* conn ) {
 void http_response ( connection_t* conn ) {
 	// 使用html文本直接输入
 
-	// conn->wlen = sprintf(conn->wbuffer, "HTTP/1.1 200 OK\r\n"
-	// 										 "Accept-Ranges: bytes\r\n"
-	// 										 "Content-Length: 78\r\n"
-	// 										 "Content-Type: text/html\r\n"
-	// 										 "Date: Sat, 06 Aug 2023 13:16:46 GMT\r\n\r\n"
-	// 										 "<html><head><title>0voice.king</title></head><body><h1>King</h1></body></html>");
-
-	//使用文件的方法传递html文件
-	const int filefd = open("/home/innno/code/0voice/2/2.1/2.1.1/2.1.1.3/index.html",O_RDONLY);
-	struct stat stat_buf {};
-	fstat(filefd, &stat_buf);
 	conn->wlen = sprintf(conn->wbuffer, "HTTP/1.1 200 OK\r\n"
 											 "Accept-Ranges: bytes\r\n"
-											 "Content-Length: %ld\r\n"
+											 "Content-Length: 78\r\n"
 											 "Content-Type: text/html\r\n"
-											 "Date: Sat, 06 Aug 2023 13:16:46 GMT\r\n\r\n", stat_buf.st_size);
-	const ssize_t count = read(filefd, conn->wbuffer + conn->wlen, conn_buff - conn->wlen);
-	conn->wlen += count;
+											 "Date: Sat, 06 Aug 2023 13:16:46 GMT\r\n\r\n"
+											 "<html><head><title>0voice.king</title></head><body><h1>King</h1></body></html>");
+
+	//使用文件的方法传递html文件
+
+	// const int filefd = open("/home/innno/code/0voice/2/2.1/2.1.1/2.1.1.3/index.html",O_RDONLY);
+	// struct stat stat_buf {};
+	// fstat(filefd, &stat_buf);
+	// conn->wlen = sprintf(conn->wbuffer, "HTTP/1.1 200 OK\r\n"
+	// 										 "Accept-Ranges: bytes\r\n"
+	// 										 "Content-Length: %ld\r\n"
+	// 										 "Content-Type: text/html\r\n"
+	// 										 "Date: Sat, 06 Aug 2023 13:16:46 GMT\r\n\r\n", stat_buf.st_size);
+	// const ssize_t count = read(filefd, conn->wbuffer + conn->wlen, conn_buff - conn->wlen);
+	// conn->wlen += count;
 }
 
 void set_sendback ( const int connfd ) {
