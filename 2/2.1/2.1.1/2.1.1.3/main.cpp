@@ -235,8 +235,10 @@ typedef ssize_t (*rcallback)(int fd);
 struct conn_item
 	{
 		int fd;
-		char buffer[conn_buff];
-		ssize_t idx;
+		char rbuffer[conn_buff];
+		ssize_t rlen;
+		char wbuffer[conn_buff];
+		ssize_t wlen;
 
 		union
 			{
@@ -285,19 +287,29 @@ ssize_t accept_cb(const int sockfd)
 			}
 		set_event(clientfd,EPOLLIN, 1);
 		connlist[clientfd].fd = clientfd;
-		memset(connlist[clientfd].buffer, 0, conn_buff);
-		connlist[clientfd].idx = 0;
+		memset(connlist[clientfd].rbuffer, 0, conn_buff);
+		connlist[clientfd].rlen = 0;
 		connlist[clientfd].reve_t.recv_callback = recv_cb;
+		memset(connlist[clientfd].wbuffer, 0, conn_buff);
+		connlist[clientfd].wlen = 0;
 		connlist[clientfd].send_callback = send_cb;
 		return clientfd;
+	}
+
+void set_sendback(const int connfd)
+	{
+		//1.send内容为recv内容
+		memcpy(connlist[connfd].wbuffer, connlist[connfd].rbuffer, connlist[connfd].rlen);
+		connlist[connfd].wlen = connlist[connfd].rlen;
+		//2.设置为http内容
 	}
 
 //clientfd
 //EPOLLIN
 ssize_t recv_cb(const int connfd)
 	{
-		char *buffer = connlist[connfd].buffer;
-		const ssize_t idx = connlist[connfd].idx;
+		char *buffer = connlist[connfd].rbuffer;
+		const ssize_t idx = connlist[connfd].rlen;
 		const ssize_t count = recv(connfd, buffer + idx, conn_buff - idx, 0);
 		if (count == 0)
 			{
@@ -306,7 +318,9 @@ ssize_t recv_cb(const int connfd)
 				close(connfd);
 				return -1;
 			}
-		connlist[connfd].idx += count;
+		connlist[connfd].rlen += count;
+		//设置send内容
+		set_sendback(connfd);
 		//设置事件
 		set_event(connfd,EPOLLOUT, 0);
 		return count;
@@ -315,8 +329,8 @@ ssize_t recv_cb(const int connfd)
 //EPOLLOUT
 ssize_t send_cb(const int connfd)
 	{
-		const char *buffer = connlist[connfd].buffer;
-		const ssize_t idx = connlist[connfd].idx;
+		const char *buffer = connlist[connfd].wbuffer;
+		const ssize_t idx = connlist[connfd].wlen;
 		const ssize_t count = send(connfd, buffer, idx, 0);
 		//恢复事件
 		set_event(connfd,EPOLLIN, 0);
@@ -353,12 +367,12 @@ int main()
 						if (events[i].events & EPOLLIN)
 							{
 								const ssize_t count = connlist[connfd].reve_t.recv_callback(connfd);
-								std::cout << "recv<--buffer: " << connlist[connfd].buffer << " count: " << count <<
+								std::cout << "recv<--buffer: " << connlist[connfd].rbuffer << " count: " << count <<
 										"\n";
 							} else if (events[i].events & EPOLLOUT)
 							{
 								const ssize_t count = connlist[connfd].send_callback(connfd);
-								std::cout << "send-->buffer: " << connlist[connfd].buffer << " count: " << count <<
+								std::cout << "send-->buffer: " << connlist[connfd].wbuffer << " count: " << count <<
 										"\n";
 							}
 					}
