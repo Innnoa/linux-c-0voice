@@ -230,151 +230,146 @@ using namespace std;
 constexpr auto conn_buff = 1024;
 constexpr auto conn_num = 1024;
 
-typedef ssize_t (*rcallback)(int fd);
+typedef ssize_t (*rcallback) ( int fd );
 
-struct conn_item
-	{
-		int fd;
-		char rbuffer[conn_buff];
-		ssize_t rlen;
-		char wbuffer[conn_buff];
-		ssize_t wlen;
+struct conn_item {
+	int fd;
+	char rbuffer[conn_buff];
+	ssize_t rlen;
+	char wbuffer[conn_buff];
+	ssize_t wlen;
 
-		union
-			{
-				rcallback accept_callback;
-				rcallback recv_callback;
-			} reve_t;
+	union {
+		rcallback accept_callback;
+		rcallback recv_callback;
+	} reve_t;
 
-		rcallback send_callback;
-	} connlist[conn_num];
+	rcallback send_callback;
+} connlist[conn_num];
 
 int epfd;
 
-ssize_t accept_cb(int sockfd);
+ssize_t accept_cb ( int sockfd );
 
-ssize_t recv_cb(int connfd);
+ssize_t recv_cb ( int connfd );
 
-ssize_t send_cb(int connfd);
+ssize_t send_cb ( int connfd );
 
-void set_event(const int fd, const int event, const int flag)
-	{
-		if (flag)
-			{
-				epoll_event ev{};
-				ev.events = event;
-				ev.data.fd = fd;
-				epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev);
-			} else
-			{
-				epoll_event ev{};
-				ev.events = event;
-				ev.data.fd = fd;
-				epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &ev);
-			}
+
+typedef conn_item connection_t;
+
+void http_response ( const connection_t* conn ) {
+	
+	conn -> wbuffer;
+	conn -> wlen;
+}
+
+
+void set_event ( const int fd, const int event, const int flag ) {
+	if (flag) {
+		epoll_event ev {};
+		ev . events = event;
+		ev . data . fd = fd;
+		epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev);
+	} else {
+		epoll_event ev {};
+		ev . events = event;
+		ev . data . fd = fd;
+		epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &ev);
 	}
+}
 
 //listenfd
 //EPOLLIN
-ssize_t accept_cb(const int sockfd)
-	{
-		sockaddr_in clientaddr{};
-		socklen_t len = sizeof(clientaddr);
-		const int clientfd = accept(sockfd, reinterpret_cast<sockaddr *>(&clientaddr), &len);
-		if (clientfd < 0)
-			{
-				return -1;
-			}
-		set_event(clientfd,EPOLLIN, 1);
-		connlist[clientfd].fd = clientfd;
-		memset(connlist[clientfd].rbuffer, 0, conn_buff);
-		connlist[clientfd].rlen = 0;
-		connlist[clientfd].reve_t.recv_callback = recv_cb;
-		memset(connlist[clientfd].wbuffer, 0, conn_buff);
-		connlist[clientfd].wlen = 0;
-		connlist[clientfd].send_callback = send_cb;
-		return clientfd;
+ssize_t accept_cb ( const int sockfd ) {
+	sockaddr_in clientaddr {};
+	socklen_t len = sizeof(clientaddr);
+	const int clientfd = accept(sockfd, reinterpret_cast <sockaddr*>(&clientaddr), &len);
+	if (clientfd < 0) {
+		return -1;
 	}
+	set_event(clientfd,EPOLLIN, 1);
+	connlist[clientfd] . fd = clientfd;
+	memset(connlist[clientfd] . rbuffer, 0, conn_buff);
+	connlist[clientfd] . rlen = 0;
+	connlist[clientfd] . reve_t . recv_callback = recv_cb;
+	memset(connlist[clientfd] . wbuffer, 0, conn_buff);
+	connlist[clientfd] . wlen = 0;
+	connlist[clientfd] . send_callback = send_cb;
+	return clientfd;
+}
 
-void set_sendback(const int connfd)
-	{
-		//1.send内容为recv内容
-		memcpy(connlist[connfd].wbuffer, connlist[connfd].rbuffer, connlist[connfd].rlen);
-		connlist[connfd].wlen = connlist[connfd].rlen;
-		//2.设置为http内容
-	}
+void set_sendback ( const int connfd ) {
+	//1.send内容为recv内容
+	memcpy(connlist[connfd] . wbuffer, connlist[connfd] . rbuffer, connlist[connfd] . rlen);
+	connlist[connfd] . wlen = connlist[connfd] . rlen;
+	//2.设置为http内容
+	//http_request(&connlist[fd]);
+	//http_response(&connlist[fd]);
+}
 
 //clientfd
 //EPOLLIN
-ssize_t recv_cb(const int connfd)
-	{
-		char *buffer = connlist[connfd].rbuffer;
-		const ssize_t idx = connlist[connfd].rlen;
-		const ssize_t count = recv(connfd, buffer + idx, conn_buff - idx, 0);
-		if (count == 0)
-			{
-				std::cout << "out\n";
-				epoll_ctl(epfd, EPOLL_CTL_DEL, connfd, nullptr);
-				close(connfd);
-				return -1;
-			}
-		connlist[connfd].rlen += count;
-		//设置send内容
-		set_sendback(connfd);
-		//设置事件
-		set_event(connfd,EPOLLOUT, 0);
-		return count;
+ssize_t recv_cb ( const int connfd ) {
+	char* buffer = connlist[connfd] . rbuffer;
+	const ssize_t idx = connlist[connfd] . rlen;
+	const ssize_t count = recv(connfd, buffer + idx, conn_buff - idx, 0);
+	if (count == 0) {
+		std::cout << "out\n";
+		epoll_ctl(epfd, EPOLL_CTL_DEL, connfd, nullptr);
+		close(connfd);
+		return -1;
 	}
+	connlist[connfd] . rlen += count;
+	//设置send内容
+	set_sendback(connfd);
+	//设置事件
+	set_event(connfd,EPOLLOUT, 0);
+	return count;
+}
 
 //EPOLLOUT
-ssize_t send_cb(const int connfd)
-	{
-		const char *buffer = connlist[connfd].wbuffer;
-		const ssize_t idx = connlist[connfd].wlen;
-		const ssize_t count = send(connfd, buffer, idx, 0);
-		//恢复事件
-		set_event(connfd,EPOLLIN, 0);
-		return count;
+ssize_t send_cb ( const int connfd ) {
+	const char* buffer = connlist[connfd] . wbuffer;
+	const ssize_t idx = connlist[connfd] . wlen;
+	const ssize_t count = send(connfd, buffer, idx, 0);
+	//恢复事件
+	set_event(connfd,EPOLLIN, 0);
+	return count;
+}
+
+int main ( ) {
+	const int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	sockaddr_in serveraddr {};
+	serveraddr . sin_family = AF_INET;
+	serveraddr . sin_addr . s_addr = htonl(INADDR_ANY);
+	serveraddr . sin_port = htons(2048);
+	if (-1 == bind(sockfd, reinterpret_cast <const sockaddr*>(&serveraddr), sizeof(sockaddr))) {
+		perror("bind");
+		return -1;
 	}
+	listen(sockfd, 10);
 
-int main()
-	{
-		const int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-		sockaddr_in serveraddr{};
-		serveraddr.sin_family = AF_INET;
-		serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-		serveraddr.sin_port = htons(2048);
-		if (-1 == bind(sockfd, reinterpret_cast<const sockaddr *>(&serveraddr), sizeof(sockaddr)))
-			{
-				perror("bind");
-				return -1;
+	connlist[sockfd] . fd = sockfd;
+	connlist[sockfd] . reve_t . accept_callback = accept_cb;
+
+	epfd = epoll_create(1);
+	set_event(sockfd,EPOLLIN, 1);
+	epoll_event events[1024] = {};
+	std::cout << "loop\n";
+	while (true) {
+		const int nready = epoll_wait(epfd, events, 1024, -1);
+		for (auto i = 0 ; i < nready ; ++i) {
+			const int connfd = events[i] . data . fd;
+			if (events[i] . events & EPOLLIN) {
+				const ssize_t count = connlist[connfd] . reve_t . recv_callback(connfd);
+				std::cout << "recv<--buffer: " << connlist[connfd] . rbuffer << " count: " << count <<
+						"\n";
+			} else if (events[i] . events & EPOLLOUT) {
+				const ssize_t count = connlist[connfd] . send_callback(connfd);
+				std::cout << "send-->buffer: " << connlist[connfd] . wbuffer << " count: " << count <<
+						"\n";
 			}
-		listen(sockfd, 10);
-
-		connlist[sockfd].fd = sockfd;
-		connlist[sockfd].reve_t.accept_callback = accept_cb;
-
-		epfd = epoll_create(1);
-		set_event(sockfd,EPOLLIN, 1);
-		epoll_event events[1024] = {};
-		std::cout << "loop\n";
-		while (true)
-			{
-				const int nready = epoll_wait(epfd, events, 1024, -1);
-				for (auto i = 0; i < nready; ++i)
-					{
-						const int connfd = events[i].data.fd;
-						if (events[i].events & EPOLLIN)
-							{
-								const ssize_t count = connlist[connfd].reve_t.recv_callback(connfd);
-								std::cout << "recv<--buffer: " << connlist[connfd].rbuffer << " count: " << count <<
-										"\n";
-							} else if (events[i].events & EPOLLOUT)
-							{
-								const ssize_t count = connlist[connfd].send_callback(connfd);
-								std::cout << "send-->buffer: " << connlist[connfd].wbuffer << " count: " << count <<
-										"\n";
-							}
-					}
-			}
+		}
 	}
+}
