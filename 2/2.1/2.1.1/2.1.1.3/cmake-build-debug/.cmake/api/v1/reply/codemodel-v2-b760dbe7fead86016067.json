@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/innno/code/0voice/2/2.1/2.1.1/2.1.1.3/cmake-build-debug",
-		"source" : "/home/innno/code/0voice/2/2.1/2.1.1/2.1.1.3"
+		"build" : "/tmp/tmp.1q5HEzorRl/2.1.1.3/cmake-build-debug",
+		"source" : "/tmp/tmp.1q5HEzorRl/2.1.1.3"
 	},
 	"version" : 
 	{
