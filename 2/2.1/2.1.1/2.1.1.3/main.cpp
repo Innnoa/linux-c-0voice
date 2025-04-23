@@ -335,11 +335,9 @@ int main() {
         const ssize_t clientfd = connlist[sockfd].accept_callback(sockfd);
         std::cout << "clientfd: " << clientfd << "\n";
       } else if (events[i].events & EPOLLIN) {
-        //const ssize_t count = recv_cb(connfd);
         const ssize_t count = connlist[connfd].recv_callback(connfd);
         std::cout << "recv<--buffer: " << connlist[connfd].buffer << " count: " << count << "\n";
       } else if (events[i].events & EPOLLOUT) {
-        //const ssize_t count = send_cb(connfd);
         const ssize_t count = connlist[connfd].send_callback(connfd);
         std::cout << "send-->buffer: " << connlist[connfd].buffer << " count: " << count << "\n";
       }
