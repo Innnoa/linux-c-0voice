@@ -237,8 +237,13 @@ struct conn_item
 		int fd;
 		char buffer[conn_buff];
 		ssize_t idx;
-		rcallback accept_callback;
-		rcallback recv_callback;
+
+		union
+			{
+				rcallback accept_callback;
+				rcallback recv_callback;
+			} reve_t;
+
 		rcallback send_callback;
 	} connlist[conn_num];
 
@@ -282,7 +287,7 @@ ssize_t accept_cb(const int sockfd)
 		connlist[clientfd].fd = clientfd;
 		memset(connlist[clientfd].buffer, 0, conn_buff);
 		connlist[clientfd].idx = 0;
-		connlist[clientfd].recv_callback = recv_cb;
+		connlist[clientfd].reve_t.recv_callback = recv_cb;
 		connlist[clientfd].send_callback = send_cb;
 		return clientfd;
 	}
@@ -333,7 +338,7 @@ int main()
 		listen(sockfd, 10);
 
 		connlist[sockfd].fd = sockfd;
-		connlist[sockfd].accept_callback = accept_cb;
+		connlist[sockfd].reve_t.accept_callback = accept_cb;
 
 		epfd = epoll_create(1);
 		set_event(sockfd,EPOLLIN, 1);
@@ -344,13 +349,10 @@ int main()
 				const int nready = epoll_wait(epfd, events, 1024, -1);
 				for (auto i = 0; i < nready; ++i)
 					{
-						if (const int connfd = events[i].data.fd; sockfd == connfd)
+						const int connfd = events[i].data.fd;
+						if (events[i].events & EPOLLIN)
 							{
-								const ssize_t clientfd = connlist[sockfd].accept_callback(sockfd);
-								std::cout << "clientfd: " << clientfd << "\n";
-							} else if (events[i].events & EPOLLIN)
-							{
-								const ssize_t count = connlist[connfd].recv_callback(connfd);
+								const ssize_t count = connlist[connfd].reve_t.recv_callback(connfd);
 								std::cout << "recv<--buffer: " << connlist[connfd].buffer << " count: " << count <<
 										"\n";
 							} else if (events[i].events & EPOLLOUT)
