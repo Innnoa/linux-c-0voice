@@ -51,7 +51,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/addr2line.exe"
+			"value" : "E:/MinGW-12.0/bin/addr2line.exe"
 		},
 		{
 			"name" : "CMAKE_AR",
@@ -67,7 +67,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/ar.exe"
+			"value" : "E:/MinGW-12.0/bin/ar.exe"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -191,7 +191,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/g++.exe"
+			"value" : "E:/MinGW-12.0/bin/c++.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
@@ -207,7 +207,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/gcc-ar.exe"
+			"value" : "E:/MinGW-12.0/bin/gcc-ar.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_RANLIB",
@@ -223,7 +223,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "E:/MinGW-12.0/bin/gcc-ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -335,7 +335,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/gcc.exe"
+			"value" : "E:/MinGW-12.0/bin/cc.exe"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -351,7 +351,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/gcc-ar.exe"
+			"value" : "E:/MinGW-12.0/bin/gcc-ar.exe"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_RANLIB",
@@ -367,7 +367,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "E:/MinGW-12.0/bin/gcc-ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_C_FLAGS",
@@ -479,7 +479,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/dlltool.exe"
+			"value" : "E:/MinGW-12.0/bin/dlltool.exe"
 		},
 		{
 			"name" : "CMAKE_EXECUTABLE_FORMAT",
@@ -727,7 +727,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/ld.exe"
+			"value" : "E:/MinGW-12.0/bin/ld.exe"
 		},
 		{
 			"name" : "CMAKE_MAKE_PROGRAM",
@@ -835,7 +835,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/nm.exe"
+			"value" : "E:/MinGW-12.0/bin/nm.exe"
 		},
 		{
 			"name" : "CMAKE_NUMBER_OF_MAKEFILES",
@@ -863,7 +863,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/objcopy.exe"
+			"value" : "E:/MinGW-12.0/bin/objcopy.exe"
 		},
 		{
 			"name" : "CMAKE_OBJDUMP",
@@ -879,7 +879,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/objdump.exe"
+			"value" : "E:/MinGW-12.0/bin/objdump.exe"
 		},
 		{
 			"name" : "CMAKE_PLATFORM_INFO_INITIALIZED",
@@ -943,7 +943,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/ranlib.exe"
+			"value" : "E:/MinGW-12.0/bin/ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_RC_COMPILER",
@@ -959,7 +959,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/windres.exe"
+			"value" : "E:/MinGW-12.0/bin/windres.exe"
 		},
 		{
 			"name" : "CMAKE_RC_COMPILER_WORKS",
@@ -1067,7 +1067,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/readelf.exe"
+			"value" : "E:/MinGW-12.0/bin/readelf.exe"
 		},
 		{
 			"name" : "CMAKE_ROOT",
@@ -1287,7 +1287,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/CLion 2/bin/mingw/bin/strip.exe"
+			"value" : "E:/MinGW-12.0/bin/strip.exe"
 		},
 		{
 			"name" : "CMAKE_TAPI",
@@ -1331,7 +1331,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "TRUE"
+			"value" : "FALSE"
 		},
 		{
 			"name" : "_CMAKE_C_LINKER_PUSHPOP_STATE_SUPPORTED",
@@ -1343,7 +1343,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "TRUE"
+			"value" : "FALSE"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

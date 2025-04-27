@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="远程主机 (f9d9cf41-ec52-4087-bae7-68e2eebad8c7)" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" confirmBeforeDeletion="false">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeDeletion="false">
     <option name="confirmBeforeDeletion" value="false" />
-    <option name="confirmBeforeUploading" value="false" />
     <serverData>
-      <paths name="远程主机 (f9d9cf41-ec52-4087-bae7-68e2eebad8c7)">
+      <paths name="远程主机 (1b7ecd34-f7b1-431c-907c-9766ee67cc93)">
         <serverdata>
           <mappings>
-            <mapping deploy="/code/0voice/2/2.1/2.1.1/2.1.1.3" local="$PROJECT_DIR$" />
+            <mapping deploy="/home/innno/code/0voice/2/2.1/2.1.1/2.1.1.3" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
             <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
           </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
