@@ -1,4 +1,4 @@
-set(CMAKE_CXX_COMPILER "E:/MinGW-12.0/bin/c++.exe")
+set(CMAKE_CXX_COMPILER "E:/MinGW/bin/c++.exe")
 set(CMAKE_CXX_COMPILER_ARG1 "")
 set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_COMPILER_VERSION "14.2.0")
@@ -24,11 +24,11 @@ set(CMAKE_CXX_SIMULATE_VERSION "")
 
 
 
-set(CMAKE_AR "E:/MinGW-12.0/bin/ar.exe")
-set(CMAKE_CXX_COMPILER_AR "E:/MinGW-12.0/bin/gcc-ar.exe")
-set(CMAKE_RANLIB "E:/MinGW-12.0/bin/ranlib.exe")
-set(CMAKE_CXX_COMPILER_RANLIB "E:/MinGW-12.0/bin/gcc-ranlib.exe")
-set(CMAKE_LINKER "E:/MinGW-12.0/bin/ld.exe")
+set(CMAKE_AR "E:/MinGW/bin/ar.exe")
+set(CMAKE_CXX_COMPILER_AR "E:/MinGW/bin/gcc-ar.exe")
+set(CMAKE_RANLIB "E:/MinGW/bin/ranlib.exe")
+set(CMAKE_CXX_COMPILER_RANLIB "E:/MinGW/bin/gcc-ranlib.exe")
+set(CMAKE_LINKER "E:/MinGW/bin/ld.exe")
 set(CMAKE_LINKER_LINK "")
 set(CMAKE_LINKER_LLD "")
 set(CMAKE_CXX_COMPILER_LINKER "../src/gcc-14.2.0/configure --host=x86_64-w64-mingw32 --build=x86_64-w64-mingw32 --target=x86_64-w64-mingw32 --prefix=/mingw64 --with-sysroot=/c/buildroot/x86_64-1420-win32-seh-ucrt-rt_v12-rev1/mingw64 --enable-host-shared --disable-multilib --enable-languages=c,c++,fortran,lto --enable-libstdcxx-time=yes --enable-threads=win32 --enable-libstdcxx-threads=yes --enable-libgomp --enable-libatomic --enable-lto --enable-graphite --enable-checking=release --enable-fully-dynamic-string --enable-version-specific-runtime-libs --enable-libstdcxx-filesystem-ts=yes --disable-libssp --disable-libstdcxx-pch --disable-libstdcxx-debug --enable-bootstrap --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-gnu-as --with-gnu-ld --with-arch=nocona --with-tune=core2 --with-libiconv --with-system-zlib --with-gmp=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-mpfr=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-mpc=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-isl=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-pkgversion='x86_64-win32-seh-rev1, Built by MinGW-Builds project' --with-bugurl=https:/github.com/niXman/mingw-builds LD_FOR_TARGET=/c/buildroot/x86_64-1420-win32-seh-ucrt-rt_v12-rev1/mingw64/bin/ld.exe")
@@ -87,9 +87,9 @@ endif()
 
 
 
-set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++;E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32;E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/backward;E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include;E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed;E:/MinGW-12.0/x86_64-w64-mingw32/include")
+set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++;E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32;E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/backward;E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include;E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed;E:/MinGW/x86_64-w64-mingw32/include")
 set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++;mingw32;gcc_s;gcc;mingwex;kernel32;advapi32;shell32;user32;kernel32;iconv;mingw32;gcc_s;gcc;mingwex;kernel32")
-set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0;E:/MinGW-12.0/lib/gcc;E:/MinGW-12.0/x86_64-w64-mingw32/lib;E:/MinGW-12.0/lib")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0;E:/MinGW/lib/gcc;E:/MinGW/x86_64-w64-mingw32/lib;E:/MinGW/lib")
 set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")
 set(CMAKE_CXX_COMPILER_CLANG_RESOURCE_DIR "")
 

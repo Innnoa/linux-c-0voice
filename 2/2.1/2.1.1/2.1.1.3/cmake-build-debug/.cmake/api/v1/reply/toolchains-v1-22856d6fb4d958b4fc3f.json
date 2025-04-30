@@ -10,16 +10,16 @@
 				{
 					"includeDirectories" : 
 					[
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include",
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed",
-						"E:/MinGW-12.0/x86_64-w64-mingw32/include"
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include",
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed",
+						"E:/MinGW/x86_64-w64-mingw32/include"
 					],
 					"linkDirectories" : 
 					[
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0",
-						"E:/MinGW-12.0/lib/gcc",
-						"E:/MinGW-12.0/x86_64-w64-mingw32/lib",
-						"E:/MinGW-12.0/lib"
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0",
+						"E:/MinGW/lib/gcc",
+						"E:/MinGW/x86_64-w64-mingw32/lib",
+						"E:/MinGW/lib"
 					],
 					"linkFrameworkDirectories" : [],
 					"linkLibraries" : 
@@ -39,7 +39,7 @@
 						"kernel32"
 					]
 				},
-				"path" : "E:/MinGW-12.0/bin/cc.exe",
+				"path" : "E:/MinGW/bin/cc.exe",
 				"version" : "14.2.0"
 			},
 			"language" : "C",
@@ -57,19 +57,19 @@
 				{
 					"includeDirectories" : 
 					[
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++",
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32",
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/backward",
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include",
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed",
-						"E:/MinGW-12.0/x86_64-w64-mingw32/include"
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++",
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32",
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/backward",
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include",
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed",
+						"E:/MinGW/x86_64-w64-mingw32/include"
 					],
 					"linkDirectories" : 
 					[
-						"E:/MinGW-12.0/lib/gcc/x86_64-w64-mingw32/14.2.0",
-						"E:/MinGW-12.0/lib/gcc",
-						"E:/MinGW-12.0/x86_64-w64-mingw32/lib",
-						"E:/MinGW-12.0/lib"
+						"E:/MinGW/lib/gcc/x86_64-w64-mingw32/14.2.0",
+						"E:/MinGW/lib/gcc",
+						"E:/MinGW/x86_64-w64-mingw32/lib",
+						"E:/MinGW/lib"
 					],
 					"linkFrameworkDirectories" : [],
 					"linkLibraries" : 
@@ -92,7 +92,7 @@
 						"kernel32"
 					]
 				},
-				"path" : "E:/MinGW-12.0/bin/c++.exe",
+				"path" : "E:/MinGW/bin/c++.exe",
 				"version" : "14.2.0"
 			},
 			"language" : "CXX",
@@ -118,7 +118,7 @@
 			"compiler" : 
 			{
 				"implicit" : {},
-				"path" : "E:/MinGW-12.0/bin/windres.exe"
+				"path" : "E:/MinGW/bin/windres.exe"
 			},
 			"language" : "RC",
 			"sourceFileExtensions" : 

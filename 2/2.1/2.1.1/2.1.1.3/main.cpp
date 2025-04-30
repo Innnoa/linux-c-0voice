@@ -348,7 +348,7 @@ using namespace std;
 // 	const ssize_t count = recv(connfd, buffer + idx, conn_buff - idx, 0);
 // 	// count 为 recv函数的返回值
 // 	if (count == 0) {
-// 		std::cout << "out\n";
+// 		//std::cout << "out\n";
 // 		epoll_ctl(epfd, EPOLL_CTL_DEL, connfd, nullptr);
 // 		close(connfd);
 // 		return -1;
@@ -396,19 +396,19 @@ using namespace std;
 // 			const int connfd = events[i].data.fd; // 提取fd
 // 			if (events[i].events & EPOLLIN) { //若event为EPOLLIN
 // 				const ssize_t count = connlist[connfd].reve_t.recv_callback(connfd); //调用recv函数
-// 				std::cout << "recv<--buffer: " << connlist[connfd].rbuffer << " count: " << count <<
-// 						"\n";
+// 				// std::cout << "recv<--buffer: " << connlist[connfd].rbuffer << " count: " << count <<
+// 				// 		"\n";
 // 			} else if (events[i].events & EPOLLOUT) { //若event为EPOLLOUT
 // 				const ssize_t count = connlist[connfd].send_callback(connfd); //调用send函数
-// 				std::cout << "send-->buffer: " << connlist[connfd].wbuffer << " count: " << count <<
-// 						"\n";
+// 				// std::cout << "send-->buffer: " << connlist[connfd].wbuffer << " count: " << count <<
+// 				// 		"\n";
 // 			}
 // 		}
 // 	}
 // }
 
 //c++ event
-
+#include <vector>
 constexpr auto conn_buff = 1024; //buff的大小
 constexpr auto conn_num = 1024; // 结构体conn_item对象的数量
 
@@ -424,6 +424,7 @@ struct conn_item { //声明一个结构体,存储以事件触发的对象
 	char wbuffer[conn_buff]; //write_buffer 存储发送的内容
 	ssize_t wlen; //wlen 存储发送的长度
 	rcallback write_callback; //单独的一个write方法
+
 } connlist[conn_num]; //对象名
 
 int epfd; // epoll的fd
@@ -457,6 +458,8 @@ ssize_t accept_cb ( const int sockfd ) { //监听函数 ,用于服务端接收�
 	const int clientfd = accept(sockfd, reinterpret_cast <sockaddr*>(&clientaddr), &len);
 	//初始化一个客户端fd
 	if (clientfd < 0) {
+		if (errno == EAGAIN || errno == EWOULDBLOCK) return -1; // 可重试
+		perror("accept failed");
 		return -1;
 	}
 	set_event(clientfd,EPOLLIN, 1); //设置事件
@@ -534,18 +537,35 @@ ssize_t recv_cb ( const int connfd ) { //接收事件的函数
 
 //EPOLLOUT
 ssize_t send_cb ( const int connfd ) { // 发送事件函数
-	const char* buffer = connlist[connfd].wbuffer; //同理
-	const ssize_t idx = connlist[connfd].wlen; //同理
-	const ssize_t count = send(connfd, buffer, idx, 0); //同理
-	//恢复事件
-	set_event(connfd,EPOLLIN, 0); // 恢复事件为接收客户端的内容
-	return count;
+	conn_item &conn = connlist[connfd];
+	ssize_t total_sent = 0;
+	while (conn.wlen > 0) {
+		const ssize_t count = send(connfd, conn.wbuffer + total_sent, conn.wlen, 0); //同理
+		if (count < 0 ) {
+			if (errno == EAGAIN) break;
+			return -1;
+		}
+		total_sent += count;
+		conn.wlen -= count;
+	}
+	if (conn.wlen == 0) {
+		set_event(connfd , EPOLLIN , 0);
+	}
+	return total_sent;
+	// const char* buffer = connlist[connfd].wbuffer; //同理
+	// const ssize_t idx = connlist[connfd].wlen; //同理
+	// const ssize_t count = send(connfd, buffer, idx, 0); //同理
+	// //恢复事件
+	// set_event(connfd,EPOLLIN, 0); // 恢复事件为接收客户端的内容
+	// return count;
 }
 
 class socket_cl {
 public:
 	socket_cl ( const int domain, const int type, const int protocol ) : sockfd_(socket(domain, type, protocol)) {
 		cout << "construction finish \n";
+		constexpr int opt = 1;
+		setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 	}
 
 	[[nodiscard]] auto get_sockfd ( ) const -> int {
