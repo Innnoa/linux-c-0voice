@@ -1,11 +1,3 @@
-/**
- * ClassName: ${NAME}
- * package: ${PACKAGE_NAME}
- * Description:
- * @Author: innno
- * @Create: 2024/2/27 - 21:54
- * @Version: v1.0
- */
 #include <array>
 #include <cerrno>
 #include <cstring>
