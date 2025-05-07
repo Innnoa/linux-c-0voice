@@ -424,7 +424,6 @@ struct conn_item { //声明一个结构体,存储以事件触发的对象
 	char wbuffer[conn_buff]; //write_buffer 存储发送的内容
 	ssize_t wlen; //wlen 存储发送的长度
 	rcallback write_callback; //单独的一个write方法
-
 } connlist[conn_num]; //对象名
 
 int epfd; // epoll的fd
@@ -541,7 +540,7 @@ ssize_t send_cb ( const int connfd ) { // 发送事件函数
 	ssize_t total_sent = 0;
 	while (conn.wlen > 0) {
 		const ssize_t count = send(connfd, conn.wbuffer + total_sent, conn.wlen, 0); //同理
-		if (count < 0 ) {
+		if (count < 0) {
 			if (errno == EAGAIN) break;
 			return -1;
 		}
@@ -549,15 +548,9 @@ ssize_t send_cb ( const int connfd ) { // 发送事件函数
 		conn.wlen -= count;
 	}
 	if (conn.wlen == 0) {
-		set_event(connfd , EPOLLIN , 0);
+		set_event(connfd, EPOLLIN, 0);
 	}
 	return total_sent;
-	// const char* buffer = connlist[connfd].wbuffer; //同理
-	// const ssize_t idx = connlist[connfd].wlen; //同理
-	// const ssize_t count = send(connfd, buffer, idx, 0); //同理
-	// //恢复事件
-	// set_event(connfd,EPOLLIN, 0); // 恢复事件为接收客户端的内容
-	// return count;
 }
 
 class socket_cl {
@@ -624,4 +617,3 @@ int main ( ) {
 		}
 	}
 }
-
